@@ -16,7 +16,7 @@ router.get('/workouts/range', (req, res) => {
       workouts.forEach(workout => {
         workout.aggregate([
           {
-            $addFields: { totalDuration: { $workout.exercises.duration } }
+            $set: { totalDuration: { $sum: '$workout.exercises.duration' } }
           }
         ])
         .then(workouts => console.log(workouts))

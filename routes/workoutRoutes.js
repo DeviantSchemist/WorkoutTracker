@@ -1,10 +1,9 @@
 const router = require('express').Router()
-const { Workout, Exercise } = require('../models')
+const { Workout } = require('../models')
 
 // GETS ALL WORKOUTS ALONG WITH THEIR ASSOCIATED EXERCISES
 router.get('/workouts', (req, res) => {
   Workout.find()
-    .populate('exercises')
     .then(workouts => res.json(workouts))
     .catch(err => console.log(err))
 })
@@ -12,7 +11,6 @@ router.get('/workouts', (req, res) => {
 // GETS A SPECIFIC WORKOUT ALONG WITH ITS ASSOCIATED EXERCISES
 router.get('/workouts/:id', (req, res) => {
   Workout.findById(req.params.id)
-    .populate('exercises')
     .then(workout => res.json(workout))
     .catch(err => console.log(err))
 })

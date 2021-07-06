@@ -19,32 +19,6 @@ router.get('/workouts/range', (req, res) => {
   )
   .then(workouts => res.json(workouts))
   .catch(err => console.log(err))
-
-  // Workout.aggregate([
-  //   {
-  //     $match: {
-  //       $expr: {
-  //         day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lte: new Date(new Date().setDate(new Date().getDate())) }
-  //       }
-  //     }
-  //   }
-  // ])
-
-
-  // Workout.find({ day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lte: new Date(new Date().setDate(new Date().getDate())) }})
-  //   .sort({ day: 1 })
-  //   .then(workouts => {
-  //     workouts.forEach(workout => {
-  //       workout.aggregate([
-  //         {
-  //           $set: { totalDuration: { $sum: '$workout.exercises.duration' } }
-  //         }
-  //       ])
-  //       .then(workouts => console.log(workouts))
-  //       .catch(err => console.log(err))
-  //     })
-  //   })
-  //   .catch(err => console.log(err))
 })
 
 // CREATES A NEW WORKOUT

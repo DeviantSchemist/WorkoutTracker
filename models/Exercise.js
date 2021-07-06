@@ -7,7 +7,11 @@ const Exercise = new Schema({
   distance: Number,
   weight: Number,
   reps: Number,
-  sets: Number
+  sets: Number,
+  workout: {
+    type: Schema.Types.ObjectId,
+    ref: 'Workout'
+  }
 })
 
 module.exports = model('Exercise', Exercise)

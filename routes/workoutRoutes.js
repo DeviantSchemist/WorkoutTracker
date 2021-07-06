@@ -10,20 +10,41 @@ router.get('/workouts', (req, res) => {
 
 // GETS ALL WORKOUTS WITHIN A SPECIFIC RANGE (IN THIS CASE IT IS 7 DAYS)
 router.get('/workouts/range', (req, res) => {
-  Workout.find({ day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lte: new Date(new Date().setDate(new Date().getDate())) }})
-    .sort({ day: 1 })
-    .then(workouts => {
-      workouts.forEach(workout => {
-        workout.aggregate([
-          {
-            $set: { totalDuration: { $sum: '$workout.exercises.duration' } }
-          }
-        ])
-        .then(workouts => console.log(workouts))
-        .catch(err => console.log(err))
-      })
-    })
-    .catch(err => console.log(err))
+  Workout.aggregate(
+    [
+      { $match: { day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lte: new Date(new Date().setDate(new Date().getDate())) } } },
+      { $sort: { day: 1 } },
+      { $addFields: { totalDuration: { $sum: '$exercises.duration' } } }
+    ]
+  )
+  .then(workouts => res.json(workouts))
+  .catch(err => console.log(err))
+
+  // Workout.aggregate([
+  //   {
+  //     $match: {
+  //       $expr: {
+  //         day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lte: new Date(new Date().setDate(new Date().getDate())) }
+  //       }
+  //     }
+  //   }
+  // ])
+
+
+  // Workout.find({ day: { $gte: new Date(new Date().setDate(new Date().getDate() - 7)), $lte: new Date(new Date().setDate(new Date().getDate())) }})
+  //   .sort({ day: 1 })
+  //   .then(workouts => {
+  //     workouts.forEach(workout => {
+  //       workout.aggregate([
+  //         {
+  //           $set: { totalDuration: { $sum: '$workout.exercises.duration' } }
+  //         }
+  //       ])
+  //       .then(workouts => console.log(workouts))
+  //       .catch(err => console.log(err))
+  //     })
+  //   })
+  //   .catch(err => console.log(err))
 })
 
 // CREATES A NEW WORKOUT

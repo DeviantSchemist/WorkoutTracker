@@ -23,21 +23,27 @@ router.get('/workouts/range', (req, res) => {
 
 // CREATES A NEW WORKOUT
 router.post('/workouts', (req, res) => {
-  Workout.create(req.body)
-    .then(workout => res.json(workout))
-    .catch(err => console.log(err))
+  Workout.create({
+    day: new Date(new Date().setDate(new Date().getDate())),
+    ...req.body
+  })
+  .then(() => res.sendStatus(200))
+  .catch(err => console.log(err))
 })
 
 // ADDS AN EXERCISE TO AN EXISTING WORKOUT
 router.put('/workouts/:id', (req, res) => {
-  Workout.findOne({ _id: req.params.id })
-    .then(workout => {
-      workout.exercises.push(req.body)
-      workout.save()
-        .then(() => res.sendStatus(200))
-        .catch(err => console.log(err))
-    })
-    .catch(err => console.log(err))
+  Workout.findByIdAndUpdate(req.params.id, { $push: { exercises: req.body } })
+  .then(() => res.sendStatus(200))
+  .catch(err => console.log(err))
+  // Workout.findOne({ _id: req.params.id })
+  //   .then(workout => {
+  //     workout.exercises.push(req.body)
+  //     workout.save()
+  //       .then(() => res.sendStatus(200))
+  //       .catch(err => console.log(err))
+  //   })
+  //   .catch(err => console.log(err))
 })
 
 module.exports = router

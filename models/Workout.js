@@ -4,7 +4,7 @@ const Workout = new Schema({
   day: Date,
   exercises: [
     {
-      type: String,
+      type: { type: String },
       name: String,
       duration: Number,
       distance: Number,
